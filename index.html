@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Sofa Generator</title>
+	<style type="text/css" media="screen">
+		@font-face {
+		    font-family: 'BoycottRegular';
+		    src: url('fonts/BOYCOTT_-webfont.eot');
+		    src: url('fonts/BOYCOTT_-webfont.eot?#iefix') format('embedded-opentype'),
+		         url('fonts/BOYCOTT_-webfont.woff') format('woff'),
+		         url('fonts/BOYCOTT_-webfont.ttf') format('truetype'),
+		         url('fonts/BOYCOTT_-webfont.svg#BoycottRegular') format('svg');
+		    font-weight: normal;
+		    font-style: normal;
+
+		}
+		body { text-align:center; font-family:sans-serif; font-size:85%; }
+		canvas#textLayer {
+			position: absolute;
+			left: -999em;
+		}
+	</style>
+	<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<script language="javascript" type="text/javascript" src="./js/plugins/context-blender/context_blender.js"></script>
+<script type="text/javascript">
+window.onload=init;
+
+function init() {
+	var bg_canvas = document.getElementById("background");
+	var bg_context = bg_canvas.getContext("2d");
+	
+	var text_canvas = document.getElementById("textLayer");
+	var text_context = text_canvas.getContext("2d");
+	
+	var bg_img = new Image();
+	bg_img.src = "images/background-base.jpg";
+	bg_img.onload = function() {
+		bg_context.drawImage(bg_img, 0, 0, bg_canvas.width, bg_canvas.height);
+		text_context.clearRect(0, 0, text_canvas.width, text_canvas.height);
+		text_context.fillStyle = "#999999";
+		text_context.fillRect(0, 0, text_canvas.width, text_canvas.height);
+		text_context.blendOnto(bg_context, 'overlay');
+			
+	};
+	
+
+	
+	//var line1 = document.getElementById("line1");
+	$('.lines').each(function() {
+		$(this).keyup(function() {
+			redrawImage();
+		});
+	});
+	
+	function redrawImage() {
+		bg_context.drawImage(bg_img, 0, 0, bg_canvas.width, bg_canvas.height);
+		text_context.clearRect(0, 0, text_canvas.width, text_canvas.height);
+		
+		text_context.fillStyle = "#999999";
+		text_context.fillRect(0, 0, text_canvas.width, text_canvas.height);
+		
+		text_context.fillStyle = "#ffffff";
+		text_context.font = "bold 5.5em BoycottRegular";
+		
+		if($('#line1').val() != "put your text here")
+			text_context.fillText($('#line1').val(), 10, 95);
+			
+		if($('#line2').val() != "and here")
+			text_context.fillText($('#line2').val(), 100, 155);
+			
+		if($('#line3').val() != "also here")
+			text_context.fillText($('#line3').val(), 140, 225);
+		
+		text_context.blendOnto(bg_context, 'overlay');		
+	}
+	
+	$('#line1').focusin(function() {
+		if($(this).val() == "put your text here") {
+			this.value = "";	
+		}
+	});
+	$('#line2').focusin(function() {
+		if($(this).val() == "and here") {
+			this.value = "";	
+		}
+	});
+	$('#line3').focusin(function() {
+		if($(this).val() == "also here") {
+			this.value = "";	
+		}
+	});	
+	
+	$('#generator').submit(function() {
+    	window.open(bg_canvas.toDataURL("image/png"));
+	});
+}
+
+</script>
+</head><body>
+	<h1>Sofa Slogan</h1>
+	<p>This is a work in progress, but feel free to play around with it.</p>
+	<p>
+		<canvas id="background" width="400" height="600"></canvas>
+	</p>
+	<p>
+		<canvas id="textLayer" width="400" height="600"></canvas>
+	</p>
+	<form id="generator">
+	<p id="content">
+		<input class="lines" type="text" id="line1" value="put your text here">
+		<input class="lines" type="text" id="line2" value="and here">
+		<input class="lines" type="text" id="line3" value="also here">
+	</p>
+	<p>
+		<input type="submit" value="Save my awesome creation" id="save">
+	</p>
+	</form>
+
+</body></html>
